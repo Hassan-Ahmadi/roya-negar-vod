@@ -1,7 +1,38 @@
 version: '3.8'
 
 services:
-  nginx:
-    build: ./nginx    
+
+  backend:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: backend
     ports:
-      - 8000:8000
+      - "8000:8000"
+    # command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./core:/app
+    # depends_on:
+    #   - db
+
+  # database containers, one for each db
+  # db:
+  #   image: postgres:14
+  #   container_name: db
+  #   volumes:
+  #     - db_volume:/var/lib/postgresql/data
+  #   environment:
+  #   - "POSTGRES_HOST_AUTH_METHOD=trust"
+    # env_file:
+    #   - config/db/dv_env
+    # networks:
+    #   - db_network
+
+  # nginx:
+  #   build: ./nginx    
+  #   ports:
+  #     - 8000:8000
+
+# volumes:
+#   db_volume: 
+  # static:
+  # media:
