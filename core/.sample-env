@@ -1,0 +1,9 @@
+SECRET_KEY="django-insecure-fwkmjpm!fs*mrzgdx(upxcvqtp0p748fstpemw_4*c62u%1mw8"
+DEBUG=True
+ALLOWED_HOSTS="'host.docker.internal', 'localhost', '0.0.0.0'"
+SQL_ENGINE=django.db.backends.postgresql
+SQL_DATABASE=postgres
+SQL_USER=postgres
+SQL_PASSWORD=postgres
+SQL_HOST=db
+SQL_PORT=5432
