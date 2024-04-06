@@ -7,5 +7,5 @@ urlpatterns = [
     # path("", get_total_movie_watch_time),
     path("watch_time/slug/<str:slug>/", get_total_movie_watch_time),
     path("watch_time/user/<str:user>/", get_total_user_watch_time),
-    path("latest_moment/user/<str:user>/slug/<str:slug>", get_latest_moment),
+    path("latest_moment/user/<str:user>/slug/<str:slug>", get_latest_moment),    
 ]

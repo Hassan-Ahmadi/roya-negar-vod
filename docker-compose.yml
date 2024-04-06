@@ -2,37 +2,49 @@ version: '3.8'
 
 services:
 
+  db:
+    image: postgres:14
+    container_name: db
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - "POSTGRES_USER=postgres"  # Default username
+      - "POSTGRES_PASSWORD=password"  # Default password
+    ports:
+      - 5432:5432
+
+
   backend:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn core.wsgi --bind 0.0.0.0:8000
     container_name: backend
-    ports:
-      - "8000:8000"
-    # command: python manage.py runserver 0.0.0.0:8000
+    expose:
+      - "8000"
     volumes:
       - ./core:/app
-    # depends_on:
-    #   - db
+      - static:/app/static
+      - media:/app/media
+    env_file:
+      - ./core/.env
+    depends_on:
+      - db
 
-  # database containers, one for each db
-  # db:
-  #   image: postgres:14
-  #   container_name: db
-  #   volumes:
-  #     - db_volume:/var/lib/postgresql/data
-  #   environment:
-  #   - "POSTGRES_HOST_AUTH_METHOD=trust"
-    # env_file:
-    #   - config/db/dv_env
-    # networks:
-    #   - db_network
 
-  # nginx:
-  #   build: ./nginx    
-  #   ports:
-  #     - 8000:8000
+  nginx:
+    build: ./nginx    
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "8000:8000"
+    depends_on:
+      - backend
+    volumes:
+      - static:/app/static
+      - media:/app/media
 
-# volumes:
-#   db_volume: 
-  # static:
-  # media:
+volumes:
+  db_volume: 
+  static:
+  media:

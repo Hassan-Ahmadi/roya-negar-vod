@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "7c2a90c2-11ea-484d-bf64-fc578493cef3",
+		"name": "Roya-Negar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13648035"
+	},
+	"item": [
+		{
+			"name": "total_movie_watch_time",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/watch_time/slug/12wmni1a3ey8v",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"watch_time",
+						"slug",
+						"12wmni1a3ey8v"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "total_user_watch_time",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/watch_time/user/17w63x3z52h5g",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"watch_time",
+						"user",
+						"17w63x3z52h5g"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "latest_moment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/latest_moment/user/3h2srcrl5ufy4/slug/1dpi4qtavjwtr",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"latest_moment",
+						"user",
+						"3h2srcrl5ufy4",
+						"slug",
+						"1dpi4qtavjwtr"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

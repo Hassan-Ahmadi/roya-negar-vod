@@ -1,48 +1,45 @@
-# Design Decisions
+# Project Setup
 
-## Initial Architecture
+This is a [Docker][] setup for a sample vod backend based on Django.
 
-Based on the project document and its requirments, this project should be able to handle a high volume of events, so it seems that these events may grow eventually and some kind of load balencing might be required soon.
+- The [Django][] application is served by [Gunicorn][] (WSGI application).
+- We use [NginX][] as reverse proxy and static files server. Static and media files are
+  persistently stored in volumes.
+- [Postgres][] database is used. Data are persistently stored in volumes.
 
-Without considering the load it seem that the below initial architecture would suffice:
+## Requirements
+You need to install [Docker][] and [Docker-Compose][].
 
-![initial architecture](Initial%20Architecture.png "initial arch")
+## Build
+`docker compose up --build`
 
-## Improved Architecture
+## Migrate databases
+```
+docker compose backend exce sh -c "python manage.py makemigrations --no-input"
+docker compose backend exce sh -c "python manage.py migrate --no-input" 
+```
 
-But when high volume of events and realtime handeling of them is considered below elements seem logical to be added:
 
-### Message Queue
+## Collect static files
+```
+docker compose backend exce sh -c "python manage.py collectstatic --no-input"
+```
 
-A message queue to ensure no event is missed even with high volumes also allow for multiple consumer in the future that currenctly **RabbitMQ** is chosen
+## Run
+`docker compose up`
 
-### Events Queueing service
+[Docker]: https://www.docker.com/
+[Django]: https://www.djangoproject.com/
+[Gunicorn]: http://gunicorn.org/
+[NginX]: https://www.nginx.com/
+[Postgres]: https://www.postgresql.org/
+[Python]: https://www.python.org/
+[Docker-Compose]: https://docs.docker.com/compose/
 
-A lightweight yet async service which has to get events and push them the queue. **FastApi + uvicorn** is chosen for its lightweightness and smooth async request handeling. This also helps seperation of conerns and modularity.
+## Test
+There is postman collection "Roya-Negar.postman_collection.json" in this repo which you can use it for test.
 
-### User Request Handler Service
+Also after creating a superuser you can also log in to django-admin panel and see more development details.
 
-An async app in django to constanly consume events from the queue then process and store them and also handle user requests. For this project **Django + gunicorn** is chosen for its completeness, modularity and its strong ORM
-
-### Database
-
-As the payload has a fixed format a SQL db may work well for now, also the db should be capabale of handeling a large connection pool. For now **PostgreSQL** seems to be a strong choice
-
-### Web Server
-
-A reverse proxy is needed to ensure robust request redirection which at the moment **Nginx** is used
-
-with the above description the architecture changes to:
-
-![Improved Architecture](./Improved%20Architecture.png "Improved Architecture")
-
-The above architecuture allow us to scale much easier, adding instances to consume event from events source or consume queued events from RabbitMQ using multiple instances of django or any other backend.
-
-But based on the First law of software architecture *Every thing is a tradeoff* so although adding queue adds reliability to our architecture it also adds some overhead and may slightly slow down the processing time.
-
-## Future Works
-
-- [ ] Engancing the Event Queue using Kafka
-- [ ] Handeling user request asyncrounesly using FastApi and deploying microserver
-- [ ] Using disterbuted DB for scaling
-- [ ] Based on the users traffic pattern a caching system can be added
+## License
+Software licensed under the [ISC license](/LICENSE).
